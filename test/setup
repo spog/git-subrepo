@@ -15,8 +15,17 @@ if [ ! -d "${SCRIPT_DIR}/../.git" ]; then
 	git config user.name "YouUser"
 	git add .
 	git commit -a -m"Initial commit"
-	git config --list
 fi
+
+# Disable any GIT configuration set outside this 'git-subrepo' project.
+# This prevents specific build environment GIT settings to influence
+# execution of the test suite.
+export XDG_CONFIG_HOME=$SCRIPT_DIR
+export HOME=$SCRIPT_DIR
+export GIT_CONFIG_NOSYSTEM=1
+# To be able to view current GIT confirguration during tests execution,
+# run the test suite by adding the '-v' option to the prove command.
+git config --list
 
 # Generate additional testing git repos, if not already present.
 mkdir -p  "${SCRIPT_DIR}/repo"
